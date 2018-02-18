@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 
 // export const Giphy = ({ name }) => {
 export class Giphy extends Component {
-	constructor(props){
-		super(props);
-		// console.log(props)
-	}
+	// constructor(props){
+	// 	super(props);
+	// 	// console.log(props)
+	// }
 
 	render(){
 		return(

@@ -13,4 +13,3 @@ ReactDOM.render(
 	</BrowserRouter>, 
 document.getElementById('root'));
 registerServiceWorker();
-// <Route exact path="/page" component={Page} />

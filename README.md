@@ -2,7 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Then:
 - Ejected and added node-sass and sass-loader
-- Configuration added to dev file for scss
+- Webpack configuration added for scss
 - Added react-router-dom
 
 ### `npm install`
