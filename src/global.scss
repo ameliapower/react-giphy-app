@@ -16,7 +16,7 @@ img{
 .search{
 	display: block;
 	width: 98%;
-    margin: 0 auto 20px;
+    margin: 10px auto;
     font-family: 'Helvetica', 'sans-serif';
 
 	input{
@@ -41,6 +41,11 @@ button{
 	}
 }
 
+.active{
+	color: pink;
+	border: 2px solid pink;
+}
+
 // button:disabled,
 // button[disabled]{
 //   border: 2px solid #ccc;
@@ -50,10 +55,6 @@ button{
 // 	position: absolute;
 // 	top: -2px;
 // 	right: -2px;	
-// }
-// .active{
-// 	color: pink;
-// 	border: 2px solid pink;
 // }
 
 // .error{

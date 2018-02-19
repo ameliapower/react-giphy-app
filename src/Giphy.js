@@ -1,17 +1,10 @@
-// import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 
 export class Giphy extends Component {
-	render(){
+	render() {
 		return(
-	        <img src={this.props.name} />
+	        <img src={this.props.name} alt={this.props.name} />
 		)
 	}
 }
-
-
-// Giphy.propTypes = {
-// 	name: PropTypes.string.isRequired
-// }
-

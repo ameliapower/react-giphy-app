@@ -1,8 +1,13 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Giphy } from './Giphy';
 import { Input, Button } from './StyleComponents';
 import './global.scss';
+
+
+const apiKey = "Zy94HT62CFrab0zoabo9gFiHWX5yhaM4";
+const urlFragment = "http://api.giphy.com/v1/gifs/search?q=";
+
 
 class App extends Component {
   constructor(props){
@@ -15,14 +20,14 @@ class App extends Component {
     }
     this.searchGifs = this.searchGifs.bind(this);
     this.getItem = this.getItem.bind(this);
-
     this.state.storage = localStorage.getItem('savedQueries') ? JSON.parse(localStorage.getItem('savedQueries')) : [];
   }
-  // Get trending gifs
+
+  // Get trending gifs on init
   componentDidMount() { 
     this.setState({ isLoading: true }); 
     const default_query = "trending";
-    const url = "http://api.giphy.com/v1/gifs/search?q="+default_query+"&api_key=Zy94HT62CFrab0zoabo9gFiHWX5yhaM4";
+    const url = urlFragment+default_query+"&api_key="+apiKey;
 
       fetch(url)
       .then(data => {
@@ -42,15 +47,15 @@ class App extends Component {
       }))
   } //componentDidMount
 
-  // get queried gifs
+
+  // Get queried gifs on user input
   searchGifs(e) {
-    e.preventDefault;
 
     let query = this.searchInput.value || "trending";
     this.searchInput.value = "";
     this.setState({ query: query, isLoading: true });
 
-    let url = "http://api.giphy.com/v1/gifs/search?q="+query+"&api_key=Zy94HT62CFrab0zoabo9gFiHWX5yhaM4";
+    let url = urlFragment+query+"&api_key="+apiKey;
 
     fetch(url, {
       method: "GET", 
@@ -61,13 +66,12 @@ class App extends Component {
       if(data.ok) {
         return data.json();
       }else{
-        throw new Error('We have an error ...');
+        throw new Error('We have an error...');
       }
     }).then(gifs => gifs.data)
       .then(gifs => this.onSetStorage( //set to localStorage
         gifs, 
-        query,
-        // isLoading: false
+        query
       ))
       .catch(isError => this.setState({
         isError, isLoading: false
@@ -75,7 +79,9 @@ class App extends Component {
     )
   } //searchGifs
 
-  onSetStorage(gifs, query){
+
+  // Set queries to storage array
+  onSetStorage(gifs, query) { 
     let queryArr = [];  
     queryArr = this.state.storage || [];
     if(!(queryArr).includes(query) && query !== ""){
@@ -85,11 +91,18 @@ class App extends Component {
     this.setState({ gifs: gifs, isLoading: false  });  //
   } //onSetStorage
 
+
+  // Retrieve from storage on click
   getItem(e){
-    e.preventDefault;
+    let unselectedItems = e.target.parentNode.childNodes;
+    for(var i=0; i<unselectedItems.length; i++){
+      unselectedItems[i].classList.remove('active');
+    }
+    e.target.classList.add('active');
+
     let query = e.target.innerHTML;
 
-    let url = "http://api.giphy.com/v1/gifs/search?q="+query+"&api_key=Zy94HT62CFrab0zoabo9gFiHWX5yhaM4";
+    let url = urlFragment+query+"&api_key="+apiKey;
 
     fetch(url, {
       method: "GET", 
@@ -112,28 +125,29 @@ class App extends Component {
       })
     )
   }
-  render() {
-    const { gifs, query, isLoading, isError } = this.state;
-    {(isLoading) ? 'Loading...' : ''}
 
+  render() {
+    const { gifs, isError, storage } = this.state;
+    
     if(isError){
       return <div>{isError.message}</div>
     }
 
     return (
       <div>
-       <div className="search">
-          <Input type="text" placeholder="Search" size=".4em" 
+        <div className="search">
+          <Input type="text" placeholder="Search..." size=".4em" 
                 innerRef={ (input) => { this.searchInput = input; } } 
                 onFocus={ (e) => e.target.placeholder = "" }
-                onBlur={ (e) => e.target.placeholder = "Search" }
+                onBlur={ (e) => e.target.placeholder = "Search..." }
           />
           <Button primary type="button" onClick={ this.searchGifs }>Go</Button>
          
          <div className="search-results">
-           { (this.state.storage.length) ? 
-            this.state.storage.map((v,i) => 
-             <Button key={i} onClick={this.getItem}>{v}</Button>
+           { (storage.length) ? 
+            storage.map((v,i) => 
+             <Button className="i" key={i} 
+             onClick={this.getItem}>{v}</Button>
             ) : "" }
           </div>
         </div>
@@ -149,10 +163,10 @@ class App extends Component {
           }
         </div>
       </div>
-    );
+    )
 
     return(
-        {gifs}
+        {gifs} 
     )
 
   } //render
